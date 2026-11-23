@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Unit 1: HTML5 Document Structure & SEO Meta Tags -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="कलाspace — An Online Portfolio for Artists and Creatives.">
+  <title>कलाspace — Online Portfolio for Artists &amp; Creatives</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- INITIAL LOGIN / SIGN UP GATE (Shown First Before Website) -->
+  <section class="auth-gate" id="authGate" aria-label="Welcome and Sign In">
+    <div class="gate-card">
+      <div class="gate-top">
+        <div class="brand">
+          <img src="logo.jpg" alt="कलाspace Logo" class="brand-logo">
+          <div>
+            <span class="brand-title">कलाspace</span>
+            <span class="brand-sub">Online Portfolio for Artists &amp; Creatives</span>
+          </div>
+        </div>
+        <button type="button" class="btn btn-secondary btn-sm" id="gateThemeBtn" aria-label="Toggle dark and light theme">☾ Dark</button>
+      </div>
+
+      <p class="gate-intro">
+        Sign in or create a creator account to publish artworks, save favorites, and leave feedback.
+      </p>
+
+      <div class="auth-tabs">
+        <button type="button" class="btn btn-primary" id="gateTabLoginBtn">Login</button>
+        <button type="button" class="btn btn-secondary" id="gateTabRegisterBtn">Sign Up</button>
+      </div>
+
+      <form id="gateAuthForm" novalidate>
+        <div id="gateRegisterFields" style="display:none;">
+          <div class="form-group">
+            <label for="gateAuthName">Full Name</label>
+            <input type="text" id="gateAuthName" placeholder="Your full name">
+          </div>
+          <div class="form-group">
+            <label for="gateAuthSpecialty">Creative Specialty</label>
+            <input type="text" id="gateAuthSpecialty" placeholder="e.g. Digital Artist">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="gateAuthEmail">Email Address</label>
+          <input type="email" id="gateAuthEmail" required placeholder="you@example.com">
+        </div>
+
+        <div class="form-group">
+          <label for="gateAuthPassword">Password (min 6 characters)</label>
+          <input type="password" id="gateAuthPassword" required minlength="6" placeholder="••••••••">
+          <span class="error-msg" id="gateAuthError"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="gateAuthSubmitBtn" style="width:100%;">Login</button>
+      </form>
+
+      <div class="gate-divider">or</div>
+
+      <button type="button" class="btn btn-secondary" id="continueGuestBtn" style="width:100%;">Continue as Guest (Browse Only)</button>
+      <p class="guest-note">
+        Guest mode lets you browse, search, and view artworks. Account-only features (upload, edit, profile, favorites, and feedback) require signing in.
+      </p>
+    </div>
+  </section>
+
+  <!-- MAIN WEBSITE SHELL (Visible After Sign In or Guest Access) -->
+  <div class="app-shell hidden" id="appShell">
+  <!-- Unit 2: Accessibility Skip Link -->
+  <a href="#mainContent" class="skip-link">Skip to main content</a>
+
+  <!-- Unit 2: Semantic Header & Navigation -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#mainContent" class="brand" aria-label="कलाspace Home">
+        <!-- Unit 1 Topic 4: Custom Brand Logo Image -->
+        <img src="logo.jpg" alt="कलाspace Logo" class="brand-logo">
+        <div>
+          <span class="brand-title">कलाspace</span>
+          <span class="brand-sub">Online Portfolio for Artists &amp; Creatives</span>
+        </div>
+      </a>
+
+      <nav class="main-nav" aria-label="Primary Navigation">
+        <button type="button" class="nav-btn active" data-view="gallery">Explore Gallery</button>
+        <button type="button" class="nav-btn" data-view="add" id="navAddBtn">Add Artwork</button>
+        <button type="button" class="nav-btn" data-view="profile" id="navProfileBtn">My Profile</button>
+        <button type="button" class="nav-btn" data-view="admin" id="navAdminBtn">Admin Moderation</button>
+      </nav>
+
+      <div class="header-right">
+        <button type="button" class="btn btn-secondary btn-sm" id="themeToggleBtn" aria-label="Toggle dark and light theme">☾ Dark</button>
+        <div class="auth-area" id="authArea"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero" aria-label="Portfolio Introduction">
+    <div class="container hero-grid">
+      <div class="hero-text">
+        <span class="hero-eyebrow">Creative Portfolio Platform</span>
+        <h1>Organize, Present, and Discover Creative Work in One Place</h1>
+        <p>
+          A clean online portfolio where artists publish projects with categories and tags,
+          and visitors search, favorite, and share feedback.
+        </p>
+        <div class="hero-actions">
+          <button type="button" class="btn btn-primary" id="heroExploreBtn">Browse Artworks</button>
+          <button type="button" class="btn btn-secondary" id="heroAddBtn">Publish Your Work</button>
+        </div>
+      </div>
+
+      <div class="hero-stats" aria-label="Portfolio Statistics">
+        <div class="stat-card">
+          <span class="stat-num" id="statWorks">0</span>
+          <span class="stat-label">Published Works</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num" id="statCreators">0</span>
+          <span class="stat-label">Creators</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num" id="statFavs">0</span>
+          <span class="stat-label">My Favorites</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Unit 2: Semantic Main Landmark -->
+  <main id="mainContent" class="container">
+
+    <!-- VIEW 1: GALLERY / LIST EXPLORER -->
+    <section id="view-gallery" class="view-section active" aria-label="Artwork Gallery">
+      <div class="toolbar" id="galleryToolbar">
+        <div class="toolbar-top">
+          <div class="search-box">
+            <label for="searchInput" class="skip-link">Search artworks</label>
+            <input type="search" id="searchInput" placeholder="Search by title, artist, tag, or description...">
+          </div>
+
+          <div class="toolbar-select">
+            <label for="sortSelect" class="skip-link">Sort artworks</label>
+            <select id="sortSelect" aria-label="Sort artworks">
+              <option value="newest">Sort: Newest First</option>
+              <option value="favorites">Sort: Most Favorited</option>
+              <option value="title">Sort: Title (A–Z)</option>
+            </select>
+          </div>
+
+          <button type="button" class="pill-btn" id="favOnlyBtn">♥ Favorites Only</button>
+
+          <div class="view-toggle" role="group" aria-label="Switch Gallery or List View">
+            <button type="button" id="gridViewBtn" class="active">Gallery</button>
+            <button type="button" id="listViewBtn">List</button>
+          </div>
+        </div>
+
+        <div class="category-pills" id="categoryPills" aria-label="Filter by Category"></div>
+
+        <div class="active-tag-bar" id="activeTagBar" style="display:none;">
+          <span>Filtered by tag: <strong id="activeTagText"></strong></span>
+          <button type="button" class="btn btn-secondary btn-sm" id="clearTagBtn">Clear Tag</button>
+        </div>
+      </div>
+
+      <div class="results-meta">
+        <span id="resultsCount">Showing 0 artworks</span>
+        <span>Tip: Click any artwork to open full details &amp; leave feedback</span>
+      </div>
+
+      <div class="portfolio-grid" id="portfolioGrid"></div>
+    </section>
+
+    <!-- VIEW 2: UPLOAD / EDIT ARTWORK (Unit 2 Forms + Validation) -->
+    <section id="view-add" class="view-section" aria-label="Add or Edit Artwork">
+      <div class="panel-card">
+        <div class="panel-header">
+          <h2 id="artFormHeading">Upload New Artwork</h2>
+          <button type="button" class="btn btn-secondary btn-sm" id="cancelEditBtn">Back to Gallery</button>
+        </div>
+
+        <form id="artworkForm" novalidate>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="artTitle">Artwork Title *</label>
+              <input type="text" id="artTitle" required minlength="3" placeholder="e.g. Golden Hour Sketches">
+            </div>
+
+            <div class="form-group">
+              <label for="artCategory">Category *</label>
+              <select id="artCategory" required>
+                <option value="Digital Art">Digital Art</option>
+                <option value="Illustration">Illustration</option>
+                <option value="Photography">Photography</option>
+                <option value="UI/UX Design">UI/UX Design</option>
+                <option value="Graphic Design">Graphic Design</option>
+                <option value="3D & Sculpture">3D &amp; Sculpture</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="artTags">Tags (comma separated)</label>
+              <input type="text" id="artTags" placeholder="e.g. minimal, poster, watercolor">
+            </div>
+
+            <div class="form-group">
+              <label for="artMedium">Medium / Tool Used</label>
+              <input type="text" id="artMedium" placeholder="e.g. Digital Painting, Figma, DSLR">
+            </div>
+
+            <div class="form-group">
+              <label for="artYear">Year *</label>
+              <input type="text" id="artYear" required value="2026" placeholder="2026">
+            </div>
+
+            <div class="form-group">
+              <label for="artPreset">Choose Built-in SVG Artwork</label>
+              <select id="artPreset"></select>
+            </div>
+
+            <div class="form-group full-width">
+              <label for="artFileInput">Or Upload Your Own Image File (Optional)</label>
+              <input type="file" id="artFileInput" accept="image/*">
+              <input type="hidden" id="uploadedDataUrl">
+              <span class="helper-text">Works offline in your browser using FileReader.</span>
+            </div>
+
+            <div class="form-group full-width">
+              <label>Live Artwork Preview</label>
+              <div class="preview-box" id="artPreviewBox"></div>
+            </div>
+
+            <div class="form-group full-width">
+              <label for="artDescription">Description *</label>
+              <textarea id="artDescription" required minlength="10" placeholder="Describe the inspiration, concept, and techniques used..."></textarea>
+              <span class="error-msg" id="artFormError"></span>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" id="artSubmitBtn">Publish Artwork</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- VIEW 3: CREATOR PROFILE -->
+    <section id="view-profile" class="view-section" aria-label="Creator Profile">
+      <div class="panel-card">
+        <div class="profile-header">
+          <div class="avatar-circle" id="profileAvatar">A</div>
+          <div class="profile-info">
+            <h2 id="profileNameDisplay">Creator Name</h2>
+            <p class="profile-meta" id="profileMetaDisplay">Specialty · Location</p>
+            <p id="profileBioDisplay"></p>
+          </div>
+          <div class="hero-stats">
+            <div class="stat-card">
+              <span class="stat-num" id="profileWorksCount">0</span>
+              <span class="stat-label">My Works</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-num" id="profileLikesCount">0</span>
+              <span class="stat-label">Total Favorites</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-card">
+        <div class="panel-header">
+          <h3>Edit Creator Profile</h3>
+        </div>
+        <form id="profileForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="profName">Display Name</label>
+              <input type="text" id="profName" required>
+            </div>
+            <div class="form-group">
+              <label for="profSpecialty">Creative Specialty</label>
+              <input type="text" id="profSpecialty" placeholder="e.g. Illustration &amp; Branding">
+            </div>
+            <div class="form-group">
+              <label for="profLocation">Location</label>
+              <input type="text" id="profLocation" placeholder="e.g. Punjab, India">
+            </div>
+            <div class="form-group">
+              <label for="profWebsite">Portfolio / Social URL</label>
+              <input type="url" id="profWebsite" placeholder="https://example.com">
+            </div>
+            <div class="form-group full-width">
+              <label for="profBio">Short Bio</label>
+              <textarea id="profBio" placeholder="Tell visitors about your creative journey..."></textarea>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Save Profile</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- VIEW 4: ADMIN MODERATION (Unit 2 Table) -->
+    <section id="view-admin" class="view-section" aria-label="Admin Moderation Dashboard">
+      <div class="panel-card">
+        <div class="panel-header">
+          <h2>Admin Content Moderation</h2>
+          <span class="helper-text">Approve pending submissions, hide works, or remove items</span>
+        </div>
+
+        <div class="hero-stats" style="margin-bottom:20px;">
+          <div class="stat-card">
+            <span class="stat-num" id="adminStatTotal">0</span>
+            <span class="stat-label">Total Works</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-num" id="adminStatApproved">0</span>
+            <span class="stat-label">Approved</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-num" id="adminStatPending">0</span>
+            <span class="stat-label">Pending</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-num" id="adminStatHidden">0</span>
+            <span class="stat-label">Hidden</span>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Artwork Title</th>
+                <th>Creator</th>
+                <th>Category</th>
+                <th>Status</th>
+                <th>Comments</th>
+                <th>Moderation Actions</th>
+              </tr>
+            </thead>
+            <tbody id="adminTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- MODAL 1: ITEM DETAIL & FEEDBACK -->
+  <div class="modal-overlay" id="detailModal" role="dialog" aria-modal="true" aria-labelledby="detailModalTitle">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2 id="detailModalTitle">Artwork Details</h2>
+        <button type="button" class="close-btn" data-close-modal="detailModal" aria-label="Close modal">&times;</button>
+      </div>
+      <div id="detailModalBody"></div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: LOGIN / REGISTER -->
+  <div class="modal-overlay" id="authModal" role="dialog" aria-modal="true" aria-labelledby="authModalTitle">
+    <div class="modal-box modal-sm">
+      <div class="modal-header">
+        <h2 id="authModalTitle">Login to कलाspace</h2>
+        <button type="button" class="close-btn" data-close-modal="authModal" aria-label="Close modal">&times;</button>
+      </div>
+
+      <div class="auth-tabs">
+        <button type="button" class="btn btn-primary" id="tabLoginBtn">Login</button>
+        <button type="button" class="btn btn-secondary" id="tabRegisterBtn">Sign Up</button>
+      </div>
+
+      <form id="authForm" novalidate>
+        <div id="registerFields" style="display:none;">
+          <div class="form-group">
+            <label for="authName">Full Name</label>
+            <input type="text" id="authName" placeholder="Your full name">
+          </div>
+          <div class="form-group">
+            <label for="authSpecialty">Creative Specialty</label>
+            <input type="text" id="authSpecialty" placeholder="e.g. Graphic Designer">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="authEmail">Email Address</label>
+          <input type="email" id="authEmail" required placeholder="you@example.com">
+        </div>
+
+        <div class="form-group">
+          <label for="authPassword">Password (min 6 characters)</label>
+          <input type="password" id="authPassword" required minlength="6" placeholder="••••••••">
+          <span class="error-msg" id="authError"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="authSubmitBtn" style="width:100%;">Login</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 3: DELETE CONFIRMATION -->
+  <div class="modal-overlay" id="deleteModal" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle">
+    <div class="modal-box modal-sm">
+      <div class="modal-header">
+        <h2 id="deleteModalTitle">Delete Artwork?</h2>
+        <button type="button" class="close-btn" data-close-modal="deleteModal" aria-label="Close modal">&times;</button>
+      </div>
+      <p style="margin-bottom:18px;">
+        Are you sure you want to permanently remove <strong id="deleteTargetName"></strong>?
+      </p>
+      <div style="display:flex; justify-content:flex-end; gap:10px;">
+        <button type="button" class="btn btn-secondary" data-close-modal="deleteModal">Cancel</button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Yes, Delete</button>
+      </div>
+    </div>
+  </div>
+
+  </div>
+
+  <!-- Accessible Toast Notification -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- Unit 2: Semantic Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; 2026 कलाspace — Online Portfolio for Artists &amp; Creatives</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
